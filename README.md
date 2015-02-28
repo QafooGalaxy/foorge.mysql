@@ -8,7 +8,20 @@ Partly ported from [ANXS/mysql](https://github.com/ANXS/mysql) role.
 Requirements
 ------------
 
-Ubuntu Server
+- Ubuntu Server
+- Servers with this role must have the Ansible group `mysql`
+
+Environment Variables
+---------------------
+
+The MySQL role provides resources to application and therefore registers
+an environment variable for each one based on the database name:
+
+    export MYSQL_CONNECTION_{DBNAME}=mysql://username:password@host:port/dbname
+
+Example:
+
+    export MYSQL_CONNECTION_TESTING=mysql://testing:foobar@localhost:3306/testing
 
 Role Variables
 --------------
