@@ -18,7 +18,7 @@ The MySQL role provides resource/service at `mysql.service.consul` domain to
 application and therefore registers an environment variable for each one based
 on the database name:
 
-    export MYSQL_CONNECTION_{DBNAME}=mysql://username:password@mysql.service.consul:3306/dbname
+    export MYSQL_CONNECTION_{NAME}=mysql://{NAME}:{PASSWORD}@mysql.service.consul:3306/{DATABASE}
 
 Example:
 
@@ -85,11 +85,20 @@ Minimal MySQL configuration to setup with root password and one database with a 
           mysql_root_password: "{{ lookup('password', 'credentials/mysql_root') }}"
           mysql_databases:
             - name: "testing"
+              database: "testing_production"
               password: "{{ lookup('password', 'credentials/mysql_app') }}"
 
 The ``lookup('password')`` calls create a folder named ``credentials/`` next to
 your Ansible provisioning playbook containing the mysql root and application
 passwords.
+
+The following keys exist in the `mysql_databases` list:
+
+- `name` is the name of the connection and the user created. (Required)
+- `password` is the password for the user that can access this database. (Required)
+- `database` is the name of the database and defaults to the given `name` (Optional)
+- `collation` is the database collation and defaults to `utf8_general_ci` (Optional)
+- `encoding` is the database encoding and defaults to `utf8` (Optional)
 
 License
 -------

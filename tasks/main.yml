@@ -39,7 +39,7 @@
 
 - name: Create Databases
   mysql_db: >
-    name={{ item.name }}
+    name={{ item.database|defaul(item.name) }}
     state=present
     collation={{ item.collation|default('utf8_general_ci') }}
     encoding={{ item.encoding|default('utf8') }}
@@ -53,7 +53,7 @@
 
 - name: Register Consul KV Configuration
   command:
-      curl -d"mysql://{{ item.name }}:{{ item.password }}@{{ mysql_consul_service }}.service.consul:{{ mysql_port }}/{{ item.name }}" -XPUT "http://localhost:8500/v1/kv/{{ mysql_consul_service }}/connection/{{ item.name }}"
+      curl -d"mysql://{{ item.name }}:{{ item.password }}@{{ mysql_consul_service }}.service.consul:{{ mysql_port }}/{{ item.database|default(item.name) }}" -XPUT "http://localhost:8500/v1/kv/{{ mysql_consul_service }}/connection/{{ item.name }}"
   with_items: mysql_databases
 
 - name: Reload Consul
