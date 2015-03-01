@@ -11,17 +11,32 @@ Requirements
 - Ubuntu Server
 - Servers with this role must have the Ansible group `mysql`
 
-Environment Variables
----------------------
+Resource
+--------
 
-The MySQL role provides resources to application and therefore registers
-an environment variable for each one based on the database name:
+The MySQL role provides resource/service at `mysql.service.consul` domain to
+application and therefore registers an environment variable for each one based
+on the database name:
 
-    export MYSQL_CONNECTION_{DBNAME}=mysql://username:password@host:port/dbname
+    export MYSQL_CONNECTION_{DBNAME}=mysql://username:password@mysql.service.consul:3306/dbname
 
 Example:
 
-    export MYSQL_CONNECTION_TESTING=mysql://testing:foobar@localhost:3306/testing
+    export MYSQL_CONNECTION_TESTING=mysql://testing:foobar@mysql.service.consul:3306/testing
+
+Connection is available from Consul as well:
+
+    $ curl http://localhost:8500/v1/kv/mysql/connection/{DBNAME}
+    [
+        {
+            "CreateIndex":43,
+            "ModifyIndex":44,
+            "LockIndex":0,
+            "Key":"mysql/testing",
+            "Flags":0,
+            "Value":"bXlzcWw6Ly90ZXN0aW5nOnRlc3RpbmdAbXlzcWwuc2VydmljZS5jb25zdWw6MzMwNi90ZXN0aW5n"
+        }
+    ]
 
 Role Variables
 --------------
