@@ -4,7 +4,6 @@
   with_items:
    - mysql-server
    - python-mysqldb
-  when: "'mysql' in group_names"
 
 - name: set mysql root password
   mysql_user: >
@@ -12,7 +11,6 @@
       host={{ item }}
       password={{ mysql_root_password|mandatory }}
       priv=*.*:ALL,GRANT
-  when: "'mysql' in group_names"
   with_items:
    - "{{ ansible_hostname }}"
    - "mysql.service.consul"
@@ -22,12 +20,10 @@
 
 - name: Generate .my.cnf file with root password credentials
   template: src=dotmy.cnf.j2 dest=/root/.my.cnf owner=root mode=0600
-  when: "'mysql' in group_names"
 
 - name: Configure MySQL
   template: src=my.cnf.j2 dest=/etc/mysql/my.cnf
   notify: Restart MySQL
-  when: "'mysql' in group_names"
 
 - name: Create MySQL User for each Database/Hosts combination
   mysql_user: >
@@ -37,7 +33,6 @@
     priv={{ item[0].name }}.*:ALL state=present
     login_password={{ mysql_root_password }}
     login_user=root
-  when: "'mysql' in group_names"
   with_nested:
     - mysql_databases 
     - mysql_allowed_hosts
@@ -52,16 +47,14 @@
     login_user=root
     login_password={{ mysql_root_password }}
   with_items: mysql_databases
-  when: "'mysql' in group_names"
 
 - name: Register Consul Service
   template: src=consul.j2 dest=/etc/consul.d/{{ mysql_consul_service }}.json
-  when: "'mysql' in group_names"
-  notify: "Reload Consul"
 
 - name: Register Consul KV Configuration
   command:
       curl -d"mysql://{{ item.name }}:{{ item.password }}@{{ mysql_consul_service }}.service.consul:{{ mysql_port }}/{{ item.name }}" -XPUT "http://localhost:8500/v1/kv/{{ mysql_consul_service }}/connection/{{ item.name }}"
-  when: "'mysql' in group_names"
   with_items: mysql_databases
-  notify: "Reload Consul"
+
+- name: Reload Consul
+  command: consul reload

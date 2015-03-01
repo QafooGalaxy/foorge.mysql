@@ -9,7 +9,7 @@ Requirements
 ------------
 
 - Ubuntu Server
-- Servers with this role must have the Ansible group `mysql`
+- "qafoo.base" role
 
 Resource
 --------
@@ -71,6 +71,8 @@ Role Variables
     mysql_innodb_lock_wait_timeout: 50
     mysql_innodb_log_buffer_size: '1M'
     mysql_innodb_log_file_size: '5M'
+
+    mysql_consul_service: 'mysql'
 
 Example Playbook
 ----------------
