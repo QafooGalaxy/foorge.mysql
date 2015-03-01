@@ -56,10 +56,12 @@
 
 - name: Register Consul Service
   template: src=consul.j2 dest=/etc/consul.d/mysql.json
+  when: "'mysql' in group_names"
   notify: "Reload Consul"
 
 - name: Register Consul KV Configuration
   command:
       curl -d"mysql://{{ item.name }}:{{ item.password }}@mysql.service.consul:{{ mysql_port }}/{{ item.name }}" -XPUT "http://localhost:8500/v1/kv/mysql/{{ item.name }}"
+  when: "'mysql' in group_names"
   with_items: mysql_databases
   notify: "Reload Consul"
