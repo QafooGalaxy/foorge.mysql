@@ -6,7 +6,7 @@ mysql_language: '/usr/share/mysql/'
 mysql_root_password: ""
 mysql_databases: []
 # Tries to find out if there is a private network that everybody should be able to connect to.
-mysql_allowed_hosts: ['127.0.0.1', "{{ mysql_bind_address|ipsubnet(24)|ipaddr('network') }}/255.255.255.0"]
+mysql_allowed_hosts: ['127.0.0.1', "{{ mysql_bind_address|ipsubnet(24)|ipaddr('network') }}/255.255.255.0", "mysql.service.consul"]
 
 mysql_key_buffer: '16M'
 mysql_max_allowed_packet: '128M'
