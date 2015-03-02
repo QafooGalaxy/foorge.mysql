@@ -26,7 +26,7 @@ Example:
 
 Connection is available from Consul as well:
 
-    $ curl http://localhost:8500/v1/kv/mysql/connection/{DBNAME}
+    $ curl http://localhost:8500/v1/kv/apps/_global/mysql/connection/{DBNAME}
     [
         {
             "CreateIndex":43,
@@ -85,6 +85,7 @@ Minimal MySQL configuration to setup with root password and one database with a 
           mysql_root_password: "{{ lookup('password', 'credentials/mysql_root') }}"
           mysql_databases:
             - name: "testing"
+              app: "testapp"
               database: "testing_production"
               password: "{{ lookup('password', 'credentials/mysql_app') }}"
 
@@ -95,6 +96,7 @@ passwords.
 The following keys exist in the `mysql_databases` list:
 
 - `name` is the name of the connection and the user created. (Required)
+- `app` is the name of the application this database is registered for in Consul, defaulting to all applications (Optional)
 - `password` is the password for the user that can access this database. (Required)
 - `database` is the name of the database and defaults to the given `name` (Optional)
 - `collation` is the database collation and defaults to `utf8_general_ci` (Optional)
