@@ -1,7 +1,7 @@
 {
     "service": {
         "name": "mysql",
-        "tags": ["master"],
+        "tags": [{% for db in mysql_databases %}"{{ db.name }}"{% if not loop.last %},{% endif %}{% endfor %}],
         "port": {{ mysql_port }}
     }
 }

@@ -49,11 +49,11 @@
   with_items: mysql_databases
 
 - name: Register Consul Service
-  template: src=consul.j2 dest=/etc/consul.d/{{ mysql_consul_service }}.json
+  template: src=consul.j2 dest=/etc/consul.d/mysql.json
 
 - name: Register Consul KV Configuration
   command:
-      curl -d"mysql://{{ item.name }}:{{ item.password }}@{{ mysql_consul_service }}.service.consul:{{ mysql_port }}/{{ item.database|default(item.name) }}" -XPUT "http://localhost:8500/v1/kv/apps/{{ item.app|default('_global') }}/{{ mysql_consul_service }}/connection/{{ item.name }}"
+      curl -d"mysql://{{ item.name }}:{{ item.password }}@{{ item.name }}.mysql.service.consul:{{ mysql_port }}/{{ item.database|default(item.name) }}" -XPUT "http://localhost:8500/v1/kv/apps/{{ item.app|default(item.name) }}/mysql/connection/{{ item.name }}"
   with_items: mysql_databases
 
 - name: Reload Consul

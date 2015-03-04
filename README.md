@@ -18,15 +18,15 @@ The MySQL role provides resource/service at `mysql.service.consul` domain to
 application and therefore registers an environment variable for each one based
 on the database name:
 
-    export MYSQL_CONNECTION_{NAME}=mysql://{NAME}:{PASSWORD}@mysql.service.consul:3306/{DATABASE}
+    export MYSQL_CONNECTION_{NAME}=mysql://{NAME}:{PASSWORD}@{APP}.mysql.service.consul:3306/{DATABASE}
 
 Example:
 
-    export MYSQL_CONNECTION_TESTING=mysql://testing:foobar@mysql.service.consul:3306/testing
+    export MYSQL_CONNECTION_TESTING=mysql://testing:foobar@{APP}.mysql.service.consul:3306/testing
 
 Connection is available from Consul as well:
 
-    $ curl http://localhost:8500/v1/kv/apps/_global/mysql/connection/{DBNAME}
+    $ curl http://localhost:8500/v1/kv/apps/{APP}/mysql/connection/{DBNAME}
     [
         {
             "CreateIndex":43,
@@ -96,9 +96,9 @@ passwords.
 The following keys exist in the `mysql_databases` list:
 
 - `name` is the name of the connection and the user created. (Required)
-- `app` is the name of the application this database is registered for in Consul, defaulting to all applications (Optional)
 - `password` is the password for the user that can access this database. (Required)
-- `database` is the name of the database and defaults to the given `name` (Optional)
+- `app` is the name of the application this database is registered for in Consul, defaulting to the connection/user name (Optional)
+- `database` is the name of the database and defaults to the given connection `name` (Optional)
 - `collation` is the database collation and defaults to `utf8_general_ci` (Optional)
 - `encoding` is the database encoding and defaults to `utf8` (Optional)
 
