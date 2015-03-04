@@ -95,9 +95,9 @@ passwords.
 
 The following keys exist in the `mysql_databases` list:
 
-- `name` is the name of the connection and the user created. (Required)
+- `app` is the name of the application this database is registered for in Consul (Required)
 - `password` is the password for the user that can access this database. (Required)
-- `app` is the name of the application this database is registered for in Consul, defaulting to the connection/user name (Optional)
+- `name` is the name of the connection and the user created, defaults to the name of the app. (Optional)
 - `database` is the name of the database and defaults to the given connection `name` (Optional)
 - `collation` is the database collation and defaults to `utf8_general_ci` (Optional)
 - `encoding` is the database encoding and defaults to `utf8` (Optional)
