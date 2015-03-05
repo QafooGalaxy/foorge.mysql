@@ -39,7 +39,7 @@
 
 - name: Create Databases
   mysql_db: >
-    name={{ item.database|default(item.name) }}
+    name={{ item.database|default(item.app) }}
     state=present
     collation={{ item.collation|default('utf8_general_ci') }}
     encoding={{ item.encoding|default('utf8') }}
