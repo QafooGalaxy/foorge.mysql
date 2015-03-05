@@ -28,9 +28,9 @@
 - name: Create MySQL User for each Database/Hosts combination
   mysql_user: >
     host={{ item[1] }}
-    name={{ item[0].name }}
+    name={{ item[0].name|default(item[0].app) }}
     password={{ item[0].password }}
-    priv={{ item[0].name }}.*:ALL state=present
+    priv={{ item[0].database|default(item[0].app) }}.*:ALL state=present
     login_password={{ mysql_root_password }}
     login_user=root
   with_nested:
